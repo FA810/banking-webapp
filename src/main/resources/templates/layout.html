@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Banking App - <span th:text="${title}">Default Title</span></title>
+    <link rel="stylesheet" href="/css/styles2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+
+<!-- Header Section -->
+<header>
+    <nav>
+        <div class="nav-wrapper container">
+            <a href="/" class="brand-logo">Banking App</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="/users">Users</a></li>
+                <li><a href="/transactions">Transactions</a></li>
+                <li><a href="/bankaccounts">Bank Accounts</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<!-- Main Content Section -->
+<div class="container">
+    <!-- Dynamically inserted content -->
+    <div th:replace="${body}"></div> <!-- The content will be replaced here -->
+</div>
+
+<!-- Footer Section -->
+<footer class="page-footer">
+    <div class="container">
+        <p>&copy; 2024 Banking App</p>
+    </div>
+</footer>
+
+<!-- Materialize JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>

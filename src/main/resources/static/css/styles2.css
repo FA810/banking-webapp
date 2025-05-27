@@ -1,0 +1,165 @@
+/* General Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1e1e1e; /* Dark grey background */
+    color: #e0e0e0; /* Light grey text */
+}
+
+header {
+    background-color: #2c3e50; /* Dark steel blue */
+    color: #ffffff;
+    padding: 20px 10px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* Jumbotron Section */
+.jumbotron {
+    background: linear-gradient(135deg, #2f4f6f, #3a5f7f); /* Dark grey-blue gradient */
+    color: #ffffff;
+    padding: 40px 20px;
+    text-align: center;
+    border-radius: 12px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 800px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.jumbotron h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.jumbotron .lead {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    opacity: 0.85;
+}
+
+/* Tables */
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
+}
+
+table th, table td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #444;
+}
+
+table thead {
+    background-color: #3a4a5a;
+    color: #ffffff;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #2e2e2e;
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: #252525;
+}
+
+table tbody tr:hover {
+    background-color: #50576b !important;
+    color: #ffffff !important;
+    cursor: pointer;
+}
+
+table thead tr:hover {
+    background-color: inherit !important;
+    color: inherit !important;
+    cursor: default !important;
+}
+
+/* Headings */
+h1, h2 {
+    text-align: center;
+    margin-top: 20px;
+    color: #9ecfff; /* Soft blue for dark background */
+}
+
+/* Footer */
+footer {
+    background-color: #2c3e50;
+    color: #ffffff;
+    text-align: center;
+    padding: 15px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 30px;
+}
+
+/* Buttons (Optional Enhancement) */
+button {
+    background-color: #3a5f7f;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #527a99;
+}
+
+/* Dark Theme for Dashboard Cards */
+.card-custom {
+    background-color: #2a2a2a; /* Dark grey background */
+    color: #e0e0e0;           /* Light grey text */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease;
+}
+
+.card-custom:hover {
+    transform: translateY(-4px);
+}
+
+.card-header h4 {
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
+    color: #ffffff;
+    border-bottom: 1px solid #444;
+    padding-bottom: 8px;
+}
+
+.card-body p {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: #cccccc;
+}
+
+.button.primary {
+    background-color: #3b82f6; /* Blue */
+    color: #ffffff;
+}
+
+.button.success {
+    background-color: #10b981; /* Green */
+    color: #ffffff;
+}
+
+.button.info {
+    background-color: #6366f1; /* Indigo */
+    color: #ffffff;
+}
+
+.button:hover {
+    filter: brightness(1.1);
+}

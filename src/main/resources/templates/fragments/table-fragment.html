@@ -1,0 +1,23 @@
+<div class="section">
+    <h4 class="section-title" th:text="${title}"></h4>
+    <table class="highlight">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>User ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <td th:text="${transaction.id}"></td>
+                <td th:text="${transaction.amount}"></td>
+                <td th:text="${transaction.transactionDate}"></td>
+                <td th:text="${transaction.description}"></td>
+                <td th:text="${transaction.user.id}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

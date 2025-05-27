@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Banking App - Home</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles2.css}" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<header>
+    <h1>Banking Application Dashboard</h1>
+</header>
+
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-4">Welcome to the Banking App!</h1>
+        <p class="lead">Manage your users, transactions, and accounts effortlessly.</p>
+    </div>
+</div>
+
+<main>
+    <h2>Users</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.email}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Transactions</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>User ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <td th:text="${transaction.id}"></td>
+                <td th:text="${transaction.amount}"></td>
+                <td th:text="${transaction.transactionDate}"></td>
+                <td th:text="${transaction.description}"></td>
+                <td th:text="${transaction.user.id}"></td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<footer>
+    <p>© <span th:text="${#dates.format(today, 'yyyy')}"></span> Banking App</p>
+</footer>
+</body>
+</html>
