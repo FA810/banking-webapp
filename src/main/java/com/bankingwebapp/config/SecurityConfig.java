@@ -2,29 +2,67 @@ package com.bankingwebapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
 
+    private final UserDetailsService userDetailsService;
+
+    public SecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-        .csrf().disable() // ✅ disable CSRF for APIs
             .authorizeRequests()
-                .requestMatchers("home", "/default", "/index", "/", "/users").permitAll()  // Allow access to these paths
-                .requestMatchers("/api/**").permitAll() 
-                .requestMatchers("/api/users").permitAll() 
-                //.anyRequest().authenticated()  // Require authentication for any other request
+                .requestMatchers("/", "/index", "/css/**", "/login", "/users/login").permitAll()
+                .anyRequest().permitAll()  // other pages accessible without login
             .and()
             .formLogin()
-                .loginPage("/login")  // Custom login page
-                .permitAll()  // Allow everyone to access the login page
+                .loginPage("/login")                      // login page URL
+                .defaultSuccessUrl("/", true) // redirect on success
+                .failureUrl("/login?error=true")           // redirect on fail with error flag
+                .permitAll()
             .and()
             .logout()
-                .permitAll();  // Allow everyone to log out
+                .logoutSuccessUrl("/login?logout=true")
+                .permitAll()
+            .and()
+            .csrf().disable();
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        return new AuthenticationProvider() {
+            @Override
+            public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+                String username = authentication.getName();
+                String password = authentication.getCredentials().toString();
+
+                UserDetails user = userDetailsService.loadUserByUsername(username);
+
+                if (user != null && user.getPassword().equals(password)) {
+                    return new UsernamePasswordAuthenticationToken(username, password, user.getAuthorities());
+                } else {
+                    throw new AuthenticationException("Invalid credentials") {};
+                }
+            }
+
+            @Override
+            public boolean supports(Class<?> authentication) {
+                return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+            }
+        };
     }
 }
