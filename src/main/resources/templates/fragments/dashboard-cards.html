@@ -1,0 +1,43 @@
+<!-- fragments/dashboard-cards.html -->
+<div th:fragment="dashboardCards">
+    <div class="grid-x grid-margin-x mb-5">
+        <!-- Users Card -->
+        <div class="cell small-12 medium-4">
+            <div class="callout card-custom">
+                <div class="card-header">
+                    <h4>Users</h4>
+                </div>
+                <div class="card-body">
+                    <p>View and manage users of the banking system.</p>
+                    <a href="/users" class="button primary">View Users</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions Card -->
+        <div class="cell small-12 medium-4">
+            <div class="callout card-custom">
+                <div class="card-header">
+                    <h4>Transactions</h4>
+                </div>
+                <div class="card-body">
+                    <p>Track and review transactions.</p>
+                    <a href="/transactions" class="button success">View Transactions</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bank Accounts Card -->
+        <div class="cell small-12 medium-4">
+            <div class="callout card-custom">
+                <div class="card-header">
+                    <h4>Bank Accounts</h4>
+                </div>
+                <div class="card-body">
+                    <p>Manage bank accounts and their details.</p>
+                    <a href="/accounts" class="button info">View Accounts</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
