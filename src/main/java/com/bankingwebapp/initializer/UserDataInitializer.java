@@ -6,30 +6,57 @@ import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Component
 public class UserDataInitializer extends BaseDataInitializer<User> {
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	// Define a limit for rows in the database
-	private static final int MAX_ROWS = 20;
+    private static final int MAX_ROWS = 60;
 
-	@Override
-	protected void initializeData() {
-		Faker faker = new Faker();
+    @Override
+    protected void initializeData() {
+        if (userRepository.count() >= MAX_ROWS) return;
 
-		// Create and save User instances
-		for (int i = 0; i < MAX_ROWS; i++) {
-			String username = faker.name().username();
-			String domain = faker.internet().domainName(); // random domain, e.g. example.com
+        // Predefined users
+        List<User> predefinedUsers = Arrays.asList(
+            createUser("admin", "admin123", "ADMIN", "admin@bank.com"),
+            createUser("fabz", "fabz", "ADMIN", "fabz@bank.com")
+        );
 
-			User user = new User();
-			user.setUsername(username);
-			user.setPassword(faker.internet().password());
-			user.setRole("USER");
-			user.setEmail(username + "@" + domain); // email starts with username
-			userRepository.save(user);
-		}
-	}
+        predefinedUsers.forEach(user -> {
+            if (!userRepository.existsByUsername(user.getUsername())) {
+                userRepository.save(user);
+            }
+        });
+
+        long remaining = MAX_ROWS - userRepository.count();
+        Faker faker = new Faker();
+
+        for (int i = 0; i < remaining; i++) {
+            String username = faker.name().username();
+            String domain = faker.internet().domainName();
+            User user = createUser(
+                username,
+                faker.internet().password(),
+                "USER",
+                username + "@" + domain
+            );
+            if (!userRepository.existsByUsername(user.getUsername())) {
+                userRepository.save(user);
+            }
+        }
+    }
+
+    private User createUser(String username, String password, String role, String email) {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setRole(role);
+        user.setEmail(email);
+        return user;
+    }
 }
