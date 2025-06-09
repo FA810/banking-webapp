@@ -317,22 +317,6 @@ a.btn-sm {
   text-decoration: none;
 }
 
-input,
-textarea,
-select {
-  background-color: #3a3b3f;
-  color: #f1f1f1;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  background-color: #444 !important;
-  color: #f1f1f1 !important;
-  border-color: #66afe9;
-  outline: none;
-}
-
 /* Autofill fix for Chromium-based browsers */
 input:-webkit-autofill,
 input:-webkit-autofill:focus,
@@ -345,4 +329,36 @@ select:-webkit-autofill:focus {
   background-color: #444 !important;
   -webkit-text-fill-color: #f1f1f1 !important;
   transition: background-color 5000s ease-in-out 0s;
+}
+
+.btn-edit {
+  background-color: #f0ad4e; /* Bootstrap warning yellow */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-edit:hover {
+  background-color: #ec971f;
+}
+
+.btn-delete {
+  background-color: #d9534f; /* Bootstrap danger red */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding:  4px 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-delete:hover {
+  background-color: #c9302c;
 }

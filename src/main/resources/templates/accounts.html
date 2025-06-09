@@ -35,8 +35,8 @@
                         <td th:text="${account.accountNumber}"></td>
                         <td th:text="${account.balance}"></td>
                         <td>
-                            <a th:href="@{/accounts/edit/{id}(id=${account.id})}" class="button warning small">Edit</a>
-                            <a th:href="@{/accounts/delete/{id}(id=${account.id})}" class="button alert small">Delete</a>
+                            <a th:href="@{/accounts/edit/{id}(id=${account.id})}" class=" btn-sm btn-edit">Edit</a>
+                            <a th:href="@{/accounts/delete/{id}(id=${account.id})}" class=" btn-sm btn-delete">Delete</a>
                         </td>
                     </tr>
                 </tbody>

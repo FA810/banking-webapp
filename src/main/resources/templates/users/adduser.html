@@ -1,41 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Banking App - Add User</title>
-    <link rel="stylesheet" th:href="@{/styles2.css}">
+	<title>Banking App - Add User</title>
+	<link rel="stylesheet" th:href="@{/styles2.css}">
 	<!-- Foundation CSS -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.5/dist/css/foundation.min.css">
 	<!-- Custom CSS -->
 	<link rel="stylesheet" href="/css/styles2.css">
 </head>
-<body>
-<div th:replace="fragments/header :: siteHeader"></div>
 
-<div class="container">
-    <h2 class="login-title">Add New User</h2>
-    <form th:action="@{/users/save}" th:object="${user}" method="post">
-        <div class="form-group">
-            <label>Username</label>
-            <input type="text" th:field="*{username}" required>
-        </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" th:field="*{password}" required>
-        </div>
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" th:field="*{email}" required>
-        </div>
-        <div class="form-group">
-            <label>Role</label>
-            <select th:field="*{role}">
-                <option value="USER">USER</option>
-                <option value="ADMIN">ADMIN</option>
-            </select>
-        </div>
-        <button type="submit" class="btn">Add User</button>
-    </form>
-</div>
+<body>
+	<div class="grid-container">
+		<div th:replace="fragments/header :: siteHeader"></div>
+	</div>
+	<div class="container">
+
+		<h2 class="login-title">Add New User</h2>
+		<form th:action="@{/users/save}" th:object="${user}" method="post">
+			<div class="form-group">
+				<label>Username</label>
+				<input type="text" th:field="*{username}" required>
+			</div>
+			<div class="form-group">
+				<label>Password</label>
+				<input type="password" th:field="*{password}" required>
+			</div>
+			<div class="form-group">
+				<label>Email</label>
+				<input type="email" th:field="*{email}" required>
+			</div>
+			<div class="form-group">
+				<label>Role</label>
+				<select th:field="*{role}">
+					<option value="USER">USER</option>
+					<option value="ADMIN">ADMIN</option>
+				</select>
+			</div>
+			<button type="submit" class="btn">Add User</button>
+		</form>
+	</div>
+
 
 </body>
+
 </html>
