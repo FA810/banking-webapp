@@ -8,18 +8,8 @@
 <body>
 
 <!-- Header Section -->
-<header>
-    <nav>
-        <div class="nav-wrapper container">
-            <a href="/" class="brand-logo">Banking App</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href="/users">Users</a></li>
-                <li><a href="/transactions">Transactions</a></li>
-                <li><a href="/bankaccounts">Bank Accounts</a></li>
-            </ul>
-        </div>
-    </nav>
-</header>
+<div th:replace="fragments/header :: siteHeader"></div>
+<main class="container" th:replace="${content}"></main>
 
 <!-- Main Content Section -->
 <div class="container">
@@ -30,7 +20,7 @@
 <!-- Footer Section -->
 <footer class="page-footer">
     <div class="container">
-        <p>&copy; 2024 Banking App</p>
+        <p>&copy; 2025 Banking App</p>
     </div>
 </footer>
 

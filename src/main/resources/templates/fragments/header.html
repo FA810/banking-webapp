@@ -1,3 +1,13 @@
 <header class="center-align teal-text">
-    <h3>Banking Application Dashboard</h3>
+	<!-- fragments/header.html -->
+	<div th:fragment="siteHeader" class="header-bar header-login-info">
+		<span>Banking WebApp</span>
+		<div class="header-login-info" th:if="${#authentication.principal != 'anonymousUser'}">
+			<span>Logged in as <strong th:text="${#authentication.name}">User</strong></span>
+			<a href="/logout" class="btn-sm">Logout</a>
+		</div>
+		<div th:unless="${#authorization.expression('isAuthenticated()')}">
+			<a th:href="@{/login}" class="btn btn-sm">Login</a>
+		</div>
+	</div>
 </header>
