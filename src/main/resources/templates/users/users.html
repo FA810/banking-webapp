@@ -32,6 +32,7 @@
 						<th>Password</th>
 						<th>Email</th>
 						<th>Role</th>
+						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -41,6 +42,13 @@
 						<td th:text="${user.password}"></td>
 						<td th:text="${user.email}"></td>
 						<td th:text="${user.role}"></td>
+						<td>
+							<a th:href="@{/users/edit/{id}(id=${user.id})}" class=" btn-sm btn-edit">Edit</a>
+							<form th:action="@{/users/delete/{id}(id=${user.id})}" method="post">
+								<button type="submit" class="btn-sm btn-delete"
+									onclick="return confirm('Are you sure?')">Delete</button>
+							</form>
+						</td>
 					</tr>
 				</tbody>
 			</table>
