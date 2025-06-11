@@ -18,12 +18,18 @@ public class BankAccountController {
 	@GetMapping
 	public String showBankAccounts(Model model) {
 		model.addAttribute("accounts", bankAccountService.getAllBankAccounts());
-		return "accounts"; // Returns the ".html" Thymeleaf template
+		return "accounts/accounts"; // Returns the ".html" Thymeleaf template
 	}
 	
 	@GetMapping("/{id}")
 	public String viewBankAccount(@PathVariable Long id, Model model) {
 	    bankAccountService.getBankAccountById(id).ifPresent(account -> model.addAttribute("account", account));
 	    return "account-detail";
+	}
+
+	@PostMapping("/delete/{id}")
+	public String deleteBankAccount(@PathVariable Long id) {
+		bankAccountService.deleteBankAccountById(id);
+		return "redirect:/accounts";
 	}
 }
