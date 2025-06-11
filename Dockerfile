@@ -29,6 +29,8 @@ WORKDIR /app
 COPY --from=build /build/target/*.jar app.jar
 
 # Copy wait script if needed
+RUN apt-get update && apt-get install -y netcat && rm -rf /var/lib/apt/lists/*
+
 COPY runapp.sh .
 RUN chmod +x runapp.sh
 
