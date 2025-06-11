@@ -43,11 +43,16 @@
 						<td th:text="${user.email}"></td>
 						<td th:text="${user.role}"></td>
 						<td>
-							<a th:href="@{/users/edit/{id}(id=${user.id})}" class=" btn-sm btn-edit">Edit</a>
-							<form th:action="@{/users/delete/{id}(id=${user.id})}" method="post">
-								<button type="submit" class="btn-sm btn-delete"
-									onclick="return confirm('Are you sure?')">Delete</button>
-							</form>
+							<div class="inline-buttons">BBB
+								<form th:action="@{/users/edit/{id}(id=${user.id})}" method="post">
+									<button type="submit" class="btn-sm btn-edit"
+											onclick="return confirm('Are you sure?')">Edit</button>
+								</form>
+								<form th:action="@{/users/delete/{id}(id=${user.id})}" method="post">
+									<button type="submit" class="btn-sm btn-delete"
+											onclick="return confirm('Are you sure?')">Delete</button>
+								</form>
+							</div>
 						</td>
 					</tr>
 				</tbody>

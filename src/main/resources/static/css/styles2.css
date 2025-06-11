@@ -256,22 +256,6 @@ tbody tr:hover {
   opacity: 0.9;
 }
 
-.btn-sm {
-  padding: 6px 10px;
-  font-size: 0.9rem;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  text-decoration: none; /* for <a> */
-}
-
-.btn-sm:hover {
-  background-color: #0056b3;
-}
-
 .header-login-info {
   display: flex;
   flex-direction: row; /* explicitly horizontal */
@@ -362,3 +346,51 @@ select:-webkit-autofill:focus {
 .btn-delete:hover {
   background-color: #c9302c;
 }
+
+.btn-sm {
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-decoration: none; /* for <a> */
+}
+
+.btn-sm:hover {
+  background-color: #0056b3;
+}
+
+.inline-buttons {
+  display: inline-flex;
+  gap: 5px; /* space between buttons */
+}
+
+.btn-edit {
+  background-color: #fdd835;
+  color: black;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-delete {
+  background-color: #e53935;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-edit:hover {
+  background-color: #fbc02d;
+}
+
+.btn-delete:hover {
+  background-color: #d32f2f;
+}
+

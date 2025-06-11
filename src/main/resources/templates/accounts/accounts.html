@@ -35,8 +35,16 @@
                         <td th:text="${account.accountNumber}"></td>
                         <td th:text="${account.balance}"></td>
                         <td>
-                            <a th:href="@{/accounts/edit/{id}(id=${account.id})}" class=" btn-sm btn-edit">Edit</a>
-                            <a th:href="@{/accounts/delete/{id}(id=${account.id})}" class=" btn-sm btn-delete">Delete</a>
+                            <div class="inline-buttons">
+                                <form th:action="@{/accounts/edit/{id}(id=${account.id})}" method="post">
+                                    <button type="submit" class="btn-sm btn-edit"
+                                            onclick="return confirm('Are you sure?')">Edit</button>
+                                </form>
+                                <form th:action="@{/accounts/delete/{id}(id=${account.id})}" method="post">
+                                    <button type="submit" class="btn-sm btn-delete"
+                                            onclick="return confirm('Are you sure?')">Delete</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
