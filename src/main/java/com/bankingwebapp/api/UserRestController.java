@@ -1,8 +1,11 @@
 package com.bankingwebapp.api;
 
+import com.bankingwebapp.dto.UserDTO;
 import com.bankingwebapp.entity.User;
+import com.bankingwebapp.kafka.UserProducer;
 import com.bankingwebapp.service.UserService;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +15,19 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserRestController {
 
 	@Autowired
 	private UserService userService;
+
+    private final UserProducer userProducer;
+
+    @PostMapping("/async")
+    public ResponseEntity<String> createUserAsync(@RequestBody UserDTO userDTO) {
+        userProducer.sendUser(userDTO);
+        return ResponseEntity.accepted().body("User creation request accepted asynchronously.");
+    }
 
 	@PostMapping
 	public ResponseEntity<?> createUser(@RequestBody User user) {

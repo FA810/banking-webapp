@@ -43,7 +43,7 @@
 						<td th:text="${user.email}"></td>
 						<td th:text="${user.role}"></td>
 						<td>
-							<div class="inline-buttons">BBB
+							<div class="inline-buttons">
 								<form th:action="@{/users/edit/{id}(id=${user.id})}" method="post">
 									<button type="submit" class="btn-sm btn-edit"
 											onclick="return confirm('Are you sure?')">Edit</button>
