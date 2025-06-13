@@ -13,7 +13,7 @@ import java.util.Map;
 @Configuration
 public class KafkaProducerConfig {
 
-    @Value("${kafka.bootstrap-servers:localhost:9092}")
+    @Value("${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}")
     private String bootstrapServers;
 
     @Bean

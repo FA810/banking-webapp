@@ -13,21 +13,6 @@ services:
     networks:
       - appnet
 
-  app:
-    build: .
-    depends_on:
-      - db
-      - kafka
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/bankingdb
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: Welcome
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-    ports:
-      - "8080:8080"
-    networks:
-      - appnet
-
   zookeeper:
     image: bitnami/zookeeper:3.8
     environment:
@@ -61,6 +46,22 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
     ports:
       - "8081:8080"
+    networks:
+      - appnet
+
+  app:
+    build: .
+    depends_on:
+      - db
+      - kafka
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/bankingdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Welcome
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_GROUP_ID: user-group
+    ports:
+      - "8080:8080"
     networks:
       - appnet
 
