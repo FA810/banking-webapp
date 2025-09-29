@@ -1,11 +1,7 @@
-version: '3.8'
 
 services:
   app:
     build: .
-    depends_on:
-      - db
-      - kafka
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/bankingdb
       SPRING_DATASOURCE_USERNAME: postgres
