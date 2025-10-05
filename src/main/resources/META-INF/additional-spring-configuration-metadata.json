@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "data.initializer.enabled",
+  "type": "java.lang.String",
+  "description": "A description for 'data.initializer.enabled'"
+}]}

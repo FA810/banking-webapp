@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New User</title>
+    <link rel="stylesheet" th:href="@{/css/styles2.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: siteHeader"></div>
+
+<div class="container">
+    <h2>Create New User</h2>
+
+    <form th:action="@{/users/create}" method="post">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required />
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+        </div>
+
+        <div class="form-group">
+            <label for="role">Role</label>
+            <select id="role" name="role">
+                <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn">Create User</button>
+    </form>
+</div>
+
+</body>
+</html>
