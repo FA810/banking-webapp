@@ -1,18 +1,42 @@
+version: '3.8'
 
 services:
-  app:
-    build: .
+  # the app
+  banking-app:
+    # Docker Compose build from current Dockerfile.
+    # optimized multi-stage build
+    build: . 
+    image: banking-app:latest
+    container_name: banking_api
+    
+    ports:
+      - "8080:8080"
+      
+    # Environment variables.
+    # Hostname is the service name in infra-compose.yml
     environment:
+      # Connection to Postgres DB ("db" service in infra-compose.yml)
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/bankingdb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: Welcome
+      
+      # Connection to  Kafka (servizio 'kafka')
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       KAFKA_GROUP_ID: user-group
-    ports:
-      - "8080:8080"
+
+    # dependencies on essential services
+    depends_on:
+      db:
+        condition: service_healthy # wait for db ready
+      kafka:
+        condition: service_started
+
+    # connect to shared network
     networks:
       - appnet
 
 networks:
+  # 'appnet' network is external and already existing
   appnet:
     external: true
+
