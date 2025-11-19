@@ -1,14 +1,12 @@
-version: '3.8'
-
 services:
   # the app
   banking-app:
     # Docker Compose build from current Dockerfile.
     # optimized multi-stage build
-    build: . 
+    build: .
     image: banking-app:latest
     container_name: banking_api
-    
+
     ports:
       - "8080:8080"
       
@@ -20,7 +18,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: Welcome
       
-      # Connection to  Kafka (servizio 'kafka')
+      # Connection to Kafka ('kafka' service)
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       KAFKA_GROUP_ID: user-group
 
@@ -39,4 +37,4 @@ networks:
   # 'appnet' network is external and already existing
   appnet:
     external: true
-
+    
