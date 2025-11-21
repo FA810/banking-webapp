@@ -21,6 +21,12 @@
 
 		<div th:replace="fragments/dashboard-cards :: dashboardCards"></div>
 
+
+		<!-- Add User Button -->
+		<div class="text-center mt-4">
+			<a href="/users/add" class="btn">Add New User</a>
+		</div>
+
 		<!-- Users Table Section -->
 		<div class="section-header">Users</div>
 		<div class="table-container">
@@ -44,9 +50,8 @@
 						<td th:text="${user.role}"></td>
 						<td>
 							<div class="inline-buttons">
-								<form th:action="@{/users/edit/{id}(id=${user.id})}" method="post">
-									<button type="submit" class="btn-sm btn-edit"
-											onclick="return confirm('Are you sure?')">Edit</button>
+								<form th:action="@{/users/edit/{id}(id=${user.id})}" method="get">
+									<button type="submit" class="btn-sm btn-edit">Edit</button>
 								</form>
 								<form th:action="@{/users/delete/{id}(id=${user.id})}" method="post">
 									<button type="submit" class="btn-sm btn-delete"
@@ -59,10 +64,7 @@
 			</table>
 		</div>
 
-		<!-- Add User Button -->
-		<div class="text-center mt-4">
-			<a href="/users/add" class="btn">Add New User</a>
-		</div>
+
 	</div>
 
 	<!-- Foundation JS -->

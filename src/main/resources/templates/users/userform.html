@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${user.id} ? 'Banking App - Update User' : 'Banking App - Add New User'"></title>
+
+
+    <!-- Foundation CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.5/dist/css/foundation.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles2.css">
+</head>
+<body>
+
+
+
+<div class="grid-container">
+
+
+
+    <div class="grid-x grid-padding-x">
+
+        <h1 th:text="${user.id} ? 'Edit User' : 'Add New User'">User Management</h1>
+
+        <div class="medium-6 cell">
+            <form
+                    th:action="${user.id} ? @{/users/update} : @{/users/save}"
+                    th:object="${user}"
+                    method="post">
+
+                <input type="hidden" th:field="*{id}" />
+
+                <div class="callout">
+                    <label for="username">Username:
+                        <input type="text" id="username" th:field="*{username}" required
+                               th:placeholder="${user.username}" />
+                    </label>
+                </div>
+
+                <div class="callout">
+                    <label for="password" th:text="${user.id} ? 'New Password (Leave blank to keep existing)' : 'Password:'">Password:</label>
+                    <input type="password" id="password" th:field="*{password}"
+                           th:required="${user.id == null}" />
+                </div>
+
+                <div class="callout">
+                    <label for="role">Role:</label>
+                    <select id="role" th:field="*{role}" required>
+                        <option value="USER" th:selected="${user.role == 'USER'}">USER</option>
+                        <option value="ADMIN" th:selected="${user.role == 'ADMIN'}">ADMIN</option>
+                        <option value="STAFF" th:selected="${user.role == 'STAFF'}">STAFF</option>
+                    </select>
+                </div>
+
+                <div class="callout">
+                    <label for="email">Email:
+                        <input type="email" id="email" th:field="*{email}" required th:placeholder="${user.email}" />
+                    </label>
+                </div>
+
+                <input
+                        type="submit"
+                        class="button primary"
+                        th:value="${user.id} ? 'Update User' : 'Save User'" />
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<p><a href="/users">Back to User List</a></p>
+
+<script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.5/dist/js/foundation.min.js"></script>
+<script>
+    <!--$(document).foundation();-->
+</script>
+
+</body>
+</html>

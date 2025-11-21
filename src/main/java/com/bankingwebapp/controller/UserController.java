@@ -3,13 +3,7 @@ package com.bankingwebapp.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import com.bankingwebapp.entity.User;
 import com.bankingwebapp.service.UserService;
@@ -30,7 +24,13 @@ public class UserController {
 	@GetMapping("/add")
 	public String showAddUserForm(Model model) {
 		model.addAttribute("user", new User());
-		return "users/adduser";
+		return "users/userform";
+	}
+
+	@PostMapping("/update")
+	public String updateUser(@ModelAttribute User user) {
+		userService.saveUser(user);
+		return "redirect:/users";
 	}
 
 	@PostMapping("/save")
@@ -43,6 +43,21 @@ public class UserController {
 	public String deleteUser(@PathVariable Long id) {
 	    userService.deleteUserById(id);
 	    return "redirect:/users";
+	}
+
+	@GetMapping("/edit/{id}")
+	public String showEditUserForm(@PathVariable Long id, Model model) {
+		User user = userService.getUserById(id).orElse(null);
+
+		// 2. If the user exists, add it to the model
+		if (user != null) {
+			model.addAttribute("user", user);
+			// 3. Returns the name of the view (the HTML form page)
+			return "users/userform";
+		} else {
+			// Error handling if the user is not found
+			return "redirect:/users";
+		}
 	}
 
 }
