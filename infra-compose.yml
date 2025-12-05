@@ -6,57 +6,46 @@ services:
     image: postgres:16
     restart: always
     environment:
-      POSTGRES_DB: bankingdb             # Database name
-      POSTGRES_USER: postgres           # Default user
-      POSTGRES_PASSWORD: Welcome        # User password
+      POSTGRES_DB: banking_app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
-      - "5432:5432"                     # Expose Postgres port (host:container)
+      - "5432:5432"
     networks:
       - appnet
-    healthcheck:                        # Check if Postgres is ready
-      test: ["CMD-SHELL", "pg_isready -U postgres -d bankingdb"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d banking_app"]
       interval: 5s
       timeout: 5s
       retries: 5
 
   # -----------------------------
-  # Zookeeper (required by Kafka)
+  # Kafka Broker (Switched to KRaft: no Zookeeper required)
   # -----------------------------
-  zookeeper:
-    image: zookeeper:3.9
-    environment:
-      ALLOW_ANONYMOUS_LOGIN: 'yes'      # Allow unauthenticated access (for local dev only)
-    ports:
-      - "2181:2181"                     # Zookeeper client port
-    networks:
-      - appnet
-    healthcheck:
-      test: ["CMD-SHELL", "echo 'ruok' | nc localhost 2181"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 5s
+  kafka-kraft:
+    image: apache/kafka:3.9.1
 
-  # -----------------------------
-  # Kafka Broker
-  # -----------------------------
-  kafka:
-    image: ubuntu/kafka:latest
+    # KAFKA_CFG_* are no longer used with the standard Apache image.
+    # We will use the environment variables provided by the Apache image (similar to K8s).
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CFG_LISTENERS: INTERNAL://:9092,EXTERNAL://:29092
-      KAFKA_CFG_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:29092
-      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
-      ALLOW_PLAINTEXT_LISTENER: 'yes'
-      
+      # Minimal KRaft configuration
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka-kraft:9093' # Use the new service name
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,CONTROLLER://kafka-kraft:9093
+      KAFKA_CLUSTER_ID: '5L6g3nShT-eMCtK--X86sw' # Use the same ID as the K8s YAML
+      KAFKA_LOG_DIRS: /tmp/kraft-storage
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+      # Necessary to start the server (which includes formatting if it doesn't exist)
+      KAFKA_SERVER_STARTUP_TIMEOUT_MS: 180000
+
     ports:
-      - "29092:29092"
-    
-    depends_on:
-      zookeeper:
-        condition: service_healthy
+      # Exposing 9092 instead of 29092 for simplicity
+      - "9092:9092"
+
     networks:
       - appnet
 
@@ -66,13 +55,13 @@ services:
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     depends_on:
-      kafka:
+      kafka-kraft:
         condition: service_started
     environment:
-      KAFKA_CLUSTERS_0_NAME: local             # Name displayed in UI
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092  # Kafka broker connection
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-kraft:9092
     ports:
-      - "8081:8080"                         # Web UI available on localhost:8081
+      - "8081:8080"
     networks:
       - appnet
 
