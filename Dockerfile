@@ -35,5 +35,6 @@ WORKDIR /app
 # 1. Copy the compiled artifact (the JAR file) from the 'build' stage
 # Ensure the JAR name matches your final artifact:
 COPY --from=build /app/target/BankingWebApp-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY src/main/resources/application.properties .
 # 2. Command to start the application
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
