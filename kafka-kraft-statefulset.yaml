@@ -1,0 +1,110 @@
+# kafka-kraft-statefulset.yaml (Utilizza un StatefulSet e Storage Persistente)
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-kraft # Nome del servizio: DEVE rimanere lo stesso
+  labels:
+    app: kafka-kraft
+spec:
+  # DEVE ESSERE PRESENTE:
+  clusterIP: None
+  ports:
+    - port: 9092
+      targetPort: 9092
+  selector:
+    app: kafka-kraft
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kafka-kraft
+spec:
+  selector:
+    matchLabels:
+      app: kafka-kraft
+  serviceName: "kafka-kraft"
+  replicas: 1 # Iniziamo con 1 per semplicità, ma in un ambiente reale ne servono 3.
+  template:
+    metadata:
+      labels:
+        app: kafka-kraft
+    spec:
+      # AGGIUNTA FONDAMENTALE: Garantisce che il gruppo di file system del volume sia 1000
+      # Questo è l'ID del gruppo utilizzato dall'utente Kafka all'interno del container.
+      securityContext:
+        fsGroup: 1000
+      initContainers:
+        - name: format-kraft
+          image: apache/kafka:3.9.1
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              KAFKA_CLUSTER_ID="5L6g3nShT-eMCtK--X86sw"
+              KAFKA_LOG_DIRS="/var/lib/kafka/data"
+              CONFIG_FILE="/tmp/server.properties"
+              
+              # 1. Crea il file di configurazione TEMPORANEO richiesto da kafka-storage.sh
+              echo "log.dirs=$KAFKA_LOG_DIRS" > $CONFIG_FILE
+              echo "node.id=1" >> $CONFIG_FILE
+              echo "process.roles=controller,broker" >> $CONFIG_FILE
+              echo "controller.quorum.voters=1@kafka-kraft:9093" >> $CONFIG_FILE
+              
+              # AGGIUNTE FONDAMENTALI: Listener e Controller Listener Names
+              echo "listeners=PLAINTEXT://:9092,CONTROLLER://:9093" >> $CONFIG_FILE
+              echo "controller.listener.names=CONTROLLER" >> $CONFIG_FILE
+              
+              # 2. Controlla e formatta
+              if [ ! -f "$KAFKA_LOG_DIRS/meta.properties" ]; then
+                echo "Formattazione della directory KRaft con Cluster ID $KAFKA_CLUSTER_ID..."
+                /opt/kafka/bin/kafka-storage.sh format \
+                  --cluster-id $KAFKA_CLUSTER_ID \
+                  --config $CONFIG_FILE
+              else
+                echo "Directory KRaft già formattata. Saltando la formattazione."
+              fi
+          volumeMounts:
+            - name: kafka-data
+              mountPath: /var/lib/kafka/data
+      containers:
+        - name: kafka
+          image: apache/kafka:3.9.1
+          ports:
+            - containerPort: 9092
+          env:
+            - name: KAFKA_NODE_ID
+              value: "1" 
+            - name: KAFKA_PROCESS_ROLES
+              value: "broker,controller" 
+            - name: KAFKA_LISTENERS
+              value: "PLAINTEXT://:9092,CONTROLLER://:9093"
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: "PLAINTEXT://kafka-kraft-0.kafka-kraft:9092,CONTROLLER://kafka-kraft-0.kafka-kraft:9093"
+            - name: KAFKA_CONTROLLER_QUORUM_VOTERS
+              value: "1@kafka-kraft-0.kafka-kraft:9093"
+            - name: KAFKA_LOG_DIRS
+              value: "/var/lib/kafka/data" # Path aggiornato
+            - name: KAFKA_CLUSTER_ID
+              value: "5L6g3nShT-eMCtK--X86sw"
+            # AGGIORNAMENTO FONDAMENTALE: Aggiunge il protocollo per il listener CONTROLLER
+            - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+              value: "PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT"
+            # AGGIUNTA FONDAMENTALE (la variabile mancante):
+            - name: KAFKA_CONTROLLER_LISTENER_NAMES
+              value: "CONTROLLER"
+          volumeMounts:
+            - name: kafka-data
+              mountPath: /var/lib/kafka/data
+          resources:
+            limits:
+              memory: "1024Mi"
+  # Definizione del Persistent Volume Claim
+  volumeClaimTemplates:
+    - metadata:
+        name: kafka-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 2Gi # Richiesta di spazio persistente
