@@ -13,7 +13,7 @@ spec:
       targetPort: 5432
   selector:
     app: postgres
-  # ClustereIP è il default, ma esplicito per chiarezza
+  # ClusterIP is the default, but explicitly stated for clarity
   type: ClusterIP 
 ---
 apiVersion: apps/v1
@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:15 # Immagine pullata/caricata in precedenza
+          image: postgres:15 # Previously pulled/loaded image
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5432
@@ -54,4 +54,4 @@ spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:
           requests:
-            storage: 1Gi # Richiesta di spazio su disco
+            storage: 1Gi # Disk space request
