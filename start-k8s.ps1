@@ -112,3 +112,48 @@ kubectl apply -f $YAML_KAFKA
 kubectl apply -f $YAML_WEBAPP
 
 Write-Host "Setup complete. Check Pod status with: kubectl get pods -A" -ForegroundColor Cyan
+
+# =================================================================
+# 5. KUBERNETES DASHBOARD INSTALLATION
+# =================================================================
+
+Write-Host "Installing Kubernetes Dashboard for monitoring..." -ForegroundColor Green
+
+# 5.1 Applying the manifest (Deployment, Service, etc.)
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+
+# 5.2 Creating Service Account and Binding (Admin Access) 
+# Create the service account
+kubectl create serviceaccount dashboard-admin -n kubernetes-dashboard | Out-Null
+# Assign Cluster Admin permissions to the account
+kubectl create clusterrolebinding dashboard-admin-binding --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:dashboard-admin | Out-Null
+
+Write-Host "Dashboard installed. To access, follow the steps for token retrieval and proxy startup." -ForegroundColor Yellow
+
+
+# =================================================================
+# 6. AUTOMATED ACCESS
+# =================================================================
+
+Write-Host "---" -ForegroundColor White
+Write-Host "AUTOMATED DASHBOARD STARTUP AND ACCESS" -ForegroundColor Green
+
+# 1. Token Generation (Valid for 24 hours)
+$DASH_TOKEN = kubectl -n kubernetes-dashboard create token dashboard-admin --duration=24h
+
+# 2. Display and Save the Token
+Write-Host "Token generated and saved in 'dashboard-token.txt' (Valid for 24h):" -ForegroundColor White
+Write-Host "------------------------------------------------------------" -ForegroundColor Cyan
+Write-Host $DASH_TOKEN -ForegroundColor Yellow
+Write-Host "------------------------------------------------------------" -ForegroundColor Cyan
+$DASH_TOKEN | Set-Content "dashboard-token.txt"
+
+# 3. Start the Proxy in a New Window (necessary for access)
+Write-Host "Starting 'kubectl proxy' in a new PowerShell window..." -ForegroundColor White
+Start-Process powershell -ArgumentList '-Command "kubectl proxy"' 
+
+# 4. Automatic Browser Opening
+Write-Host "Automatically opening the browser. Paste the copied/displayed token." -ForegroundColor White
+Start-Process "http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
+
+Write-Host "---" -ForegroundColor White
