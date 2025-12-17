@@ -16,7 +16,7 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
-    @Value("${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka-kraft:9092}")
+    @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
     @Value("${KAFKA_GROUP_ID:user-group}")
